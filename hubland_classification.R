@@ -72,28 +72,6 @@ b <- ggR(classification_rf_veg$map, geom_raster=T)+
 
 b
 
-###combined data from previous generation
-samples_4gen <- readOGR("/home/luisa/Documents/UniWü/Eagle/2.Semester/MB3_BayWa/MB3_FINAL-master/Data/Merge_df.shp")
-unique(samples_4gen$Class)
-
-samples_4gen$Class[samples_4gen$Class == "Trees"]  <- "TREE"
-samples_4gen$Class[samples_4gen$Class == "Built-up"]  <- "BUILT"      
-samples_4gen$Class[samples_4gen$Class == "Grassland"]  <- "GRASS"  
-samples_4gen$Class[samples_4gen$Class == "Agriculture"]  <- "AGRI"    
-samples_4gen$Class[samples_4gen$Class == "Vineyards"]  <- "VINE"   
-samples_4gen$Class[samples_4gen$Class == "Water"]  <- "WATER"    
-
-colnames(samples_4gen@data)[5] <- "name"
-samples_4gen@data
-
-samples@data#[3]
-
-
-writeOGR(samples_4gen
-, ".", "samples_4gen", 
-         driver = "ESRI Shapefile") #also you were missing the driver argument
-
-
 ####combined with 4th generation data
 combined_samples <- readOGR(paste0(getwd(),"/field_samples_hubland_all_with_4gen.shp"))
 combined_samples
