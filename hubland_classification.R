@@ -1,4 +1,3 @@
-setwd("~/Documents/UniWü/Eagle/2.Semester/MB3_BayWa/field_data_hubland")
 
 library(RStoolbox)
 library(sp)
