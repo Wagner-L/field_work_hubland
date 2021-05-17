@@ -3,25 +3,22 @@ library(RStoolbox)
 library(sp)
 library(tidyverse)
 library(rgdal)
+library(raster)
 
 
-
-sat <- raster("raster/20210509_planet_data_wue.tif", layer=4)
+sat <- raster("data/20210509_planet_data_wue.tif", layer=4)
 sat
 
-samples <- readOGR(paste0(getwd(),"/field_samples_hubland_all.shp"))
+samples <- readOGR("data/field_samples_hubland_all.shp")
 samples$name
 
 plot(sat)
 plot(samples, add=T)
 View(as.data.frame(samples))
-
-
-
 unique(samples$name)
 
 
-###all samples, all classes
+### all samples, all classes
 classification_rf<- superClass(sat, trainData=samples,
                  responseCol = "name",
                  model = "rf",
@@ -40,7 +37,7 @@ print(paste0("Overall Accuray: ",classification_rf$validation$performance$overal
 a <- ggR(classification_rf$map, geom_raster=T)+
   labs(title = "All sampled points",
        subtitle = "all classes",
-      caption = paste0("Overall Accuray: ",round(classification$validation$performance$overall[1], digits=2)))
+      caption = paste0("Overall Accuray: ",round(classification_rf$validation$performance$overall[1], digits=2)))
 
 a
 
@@ -73,7 +70,7 @@ b <- ggR(classification_rf_veg$map, geom_raster=T)+
 b
 
 ####combined with 4th generation data
-combined_samples <- readOGR(paste0(getwd(),"/field_samples_hubland_all_with_4gen.shp"))
+combined_samples <- readOGR("data/field_samples_hubland_all_with_4gen.shp")
 combined_samples
 
 plot(sat)
@@ -97,8 +94,8 @@ c <- ggR(classification_rf_combined$map, geom_raster=T)+
        subtitle = "all classes",
        caption = paste0("Overall Accuray: ",round(classification_rf_combined$validation$performance$overall[1], digits=2)))
 
-
 c
+
 ### combined with 4 gen data and combined veg class
 
 combined_samples_veg <-  combined_samples
@@ -130,6 +127,7 @@ d
 
 
 ### stack figures
+library(egg)
 figure <- ggarrange(a, b, c,d,
                     ncol = 2, nrow = 2)
 figure
