@@ -8,9 +8,11 @@ library(raster)
 
 sat <- raster("data/20210509_planet_data_wue.tif", layer=4)
 sat
+crs(sat)
 
-samples <- readOGR("data/field_samples_hubland_all.shp")
-samples$name
+samples <- readOGR("data/field_samples_hubland_all3.shp")
+#samples$name
+crs(samples)
 
 plot(sat)
 plot(samples, add=T)
@@ -62,7 +64,7 @@ classification_rf_veg <- superClass(sat, trainData=samples_veg,
  
 print(paste0("Overall Accuray: ",classification_rf_veg$validation$performance$overall[1]))
 classification_rf_veg$validation$performance$byClass[,11]
-b <- ggR(classification_rf_veg$map, geom_raster=T)+
+ b <- ggR(classification_rf_veg$map, geom_raster=T)+
   labs(title = "All sampled points",
        subtitle = "vegetation in combined class",
        caption = paste0("Overall Accuray: ",round(classification_rf_veg$validation$performance$overall[1], digits=2)))
@@ -70,7 +72,7 @@ b <- ggR(classification_rf_veg$map, geom_raster=T)+
 b
 
 ####combined with 4th generation data
-combined_samples <- readOGR("data/field_samples_hubland_all_with_4gen.shp")
+combined_samples <- readOGR("data/field_samples_hubland_all_with_4gen2.shp")
 combined_samples
 
 plot(sat)
@@ -103,7 +105,7 @@ combined_samples_veg@data$name[combined_samples@data$name == "TREE" |
                              combined_samples@data$name == "VINE" | 
                              combined_samples@data$name == "GRASS" |
                              combined_samples@data$name == "AGRI"] <- "VEG"
-
+#View(as.data.frame(combined_samples_veg))
 
 classification_rf_combined_veg <- superClass(sat, trainData=combined_samples_veg,
                                          responseCol = "name",
